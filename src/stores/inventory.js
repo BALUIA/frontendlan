@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8080') + '/api/inventory';
+const API_URL = 'https://backendlan.onrender.com/api/inventory';
 
 export const useInventoryStore = defineStore('inventory', {
   state: () => ({

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8080') + '/api/products';
+const API_URL = 'https://backendlan.onrender.com/api/products';
 
 export const useProductHistoryStore = defineStore('productHistory', {
   state: () => ({

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_URL = 'https://backendlan.onrender.com';
 
 export const useTurnoStore = defineStore('turno', {
   actions: {
