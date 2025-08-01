@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const API_URL = 'https://backendlan.onrender.com/api/caja';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/caja`;
 
 export const useCajaStore = defineStore('caja', {
   state: () => ({

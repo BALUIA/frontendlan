@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const API_URL = 'https://backendlan.onrender.com/api/tasks';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/tasks`;
 
 export const useTaskStore = defineStore('task', {
   state: () => ({

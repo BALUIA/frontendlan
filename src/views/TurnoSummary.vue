@@ -49,18 +49,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import { useTurnoStore } from '../stores/turno';
 
 const route = useRoute();
 const router = useRouter();
 const summary = ref(null);
 const error = ref(null);
+const turnoStore = useTurnoStore();
 
 const fetchTurnoSummary = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/turnos/${id}/summary`);
-    summary.value = response.data;
+    summary.value = await turnoStore.getTurnoSummary(id);
   } catch (err) {
     error.value = 'Failed to fetch turno summary.';
     console.error(err);

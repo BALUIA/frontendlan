@@ -3,7 +3,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import router from '../router'; // Import the router
 
-const API_URL = 'https://backendlan.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
