@@ -17,6 +17,11 @@ export const useAuthStore = defineStore('auth', {
       const decoded = jwtDecode(state.token);
       return decoded.roles?.includes('ROLE_ADMIN');
     },
+    username: (state) => {
+      if (!state.token) return null;
+      const decoded = jwtDecode(state.token);
+      return decoded.sub; // El nombre de usuario está en el campo 'sub' del JWT
+    },
   },
   actions: {
     async login(username, password) {

@@ -85,7 +85,7 @@ const deleteTurno = async (id) => {
   await nextTick();
   try {
     await turnoStore.deleteTurno(id);
-    await fetchTurnos();
+    await fetchTurnos(); // Recargar la lista después de eliminar
     notificationStore.show('Turno eliminado correctamente.');
   } catch (error) {
     notificationStore.show(error.message, 'error');

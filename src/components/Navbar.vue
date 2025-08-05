@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app color="primary" dark>
     <v-toolbar-title>
-      <router-link to="/" class="white--text text-decoration-none">Auth App</router-link>
+      <router-link to="/" class="white--text text-decoration-none">SUITEGAMING</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn to="/login" text v-if="!authStore.isAuthenticated">Login</v-btn>
