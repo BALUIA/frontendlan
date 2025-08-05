@@ -63,7 +63,7 @@
             <v-col cols="12" md="3"><v-text-field v-model.number="turno.ingresoInventario" label="Ingreso Inventario (Calculado)" type="number" step="0.01" readonly required :disabled="isRegistering"></v-text-field></v-col>
             <v-col cols="12" md="3"><v-text-field v-model.number="turno.retiros" label="Retiros (Calculado)" type="number" step="0.01" readonly required :disabled="isRegistering"></v-text-field></v-col>
           </v-row>
-          <v-alert :color="diferencia >= 0 ? 'success' : 'error'" border="start" elevation="2" class="mt-4">
+          <v-alert :color="diferencia >= 0 ? 'error' : 'success'" border="start" elevation="2" class="mt-4">
             <h3 class="text-h5">Diferencia: S/ {{ diferencia }}</h3>
           </v-alert>
           <v-btn type="submit" color="primary" class="mt-4" :loading="isRegistering" :disabled="isRegistering">Registrar Turno</v-btn>
