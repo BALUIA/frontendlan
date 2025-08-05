@@ -40,13 +40,23 @@
 import { ref, onMounted } from 'vue';
 import InventoryMovementForm from '../components/InventoryMovementForm.vue';
 import { useInventoryStore } from '../stores/inventory';
+import { useNotificationStore } from '../stores/notification';
 
 const inventoryStore = useInventoryStore();
+const notificationStore = useNotificationStore();
 const movements = ref([]);
+const isPageLoading = ref(true);
 
 const fetchMovements = async () => {
-  await inventoryStore.fetchMovements();
-  movements.value = inventoryStore.movements;
+  isPageLoading.value = true;
+  try {
+    await inventoryStore.fetchMovements();
+    movements.value = inventoryStore.movements;
+  } catch (error) {
+    notificationStore.show('Error al cargar los movimientos de inventario.', 'error');
+  } finally {
+    isPageLoading.value = false;
+  }
 };
 
 const onMovementRegistered = () => {
