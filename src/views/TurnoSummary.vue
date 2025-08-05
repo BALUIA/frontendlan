@@ -50,6 +50,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useTurnoStore } from '../stores/turno';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
