@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { useProductStore } from '../stores/product';
 import { useNotificationStore } from '../stores/notification';
