@@ -6,7 +6,7 @@
       <v-card-title>Crear Nueva Tarea</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleCreateTask">
-          <v-textarea v-model="newTask.description" label="Descripción de la Tarea" required></v-textarea>
+          <v-textarea v-model="newTask.description" label="Descripción de la Tarea" required :disabled="isCreatingTask"></v-textarea>
           <v-select
             v-model="newTask.assignedToUserId"
             :items="users"
@@ -14,10 +14,9 @@
             item-value="id"
             label="Asignar a"
             required
+            :disabled="isCreatingTask"
           ></v-select>
-          <v-btn type="submit" color="primary">Crear Tarea</v-btn>
-          <v-alert v-if="successMessage" type="success" class="mt-2">{{ successMessage }}</v-alert>
-          <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
+          <v-btn type="submit" color="primary" :loading="isCreatingTask" :disabled="isCreatingTask">Crear Tarea</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -58,28 +57,30 @@
 import { ref, onMounted, computed } from 'vue';
 import { useTaskStore } from '../stores/task';
 import { useAuthStore } from '../stores/auth';
+import { useNotificationStore } from '../stores/notification';
 
 const taskStore = useTaskStore();
 const authStore = useAuthStore();
+const notificationStore = useNotificationStore();
 
 const newTask = ref({ description: '', assignedToUserId: null });
-const successMessage = ref('');
-const errorMessage = ref('');
+const isCreatingTask = ref(false);
 
 const users = ref([]);
 const allTasks = computed(() => taskStore.allTasks);
 
 const handleCreateTask = async () => {
+  isCreatingTask.value = true;
   try {
     await taskStore.createTask(newTask.value);
-    successMessage.value = 'Tarea creada exitosamente!';
-    errorMessage.value = '';
+    notificationStore.show('Tarea creada exitosamente!');
     newTask.value.description = '';
     newTask.value.assignedToUserId = null;
     await taskStore.fetchAllTasks();
   } catch (error) {
-    errorMessage.value = error.message;
-    successMessage.value = '';
+    notificationStore.show(error.message, 'error');
+  } finally {
+    isCreatingTask.value = false;
   }
 };
 
@@ -87,7 +88,7 @@ const fetchUsers = async () => {
   try {
     users.value = await authStore.getAllUsers();
   } catch (error) {
-    errorMessage.value = error.message;
+    notificationStore.show(error.message, 'error');
   }
 };
 

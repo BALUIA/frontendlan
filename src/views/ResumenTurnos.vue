@@ -43,7 +43,7 @@
                 <td>{{ turno.usuarios }}</td>
                 <td>{{ (turno.dineroPancafe + turno.snacks - turno.retiros - turno.consumo - turno.efectivo - turno.yape).toFixed(2) }}</td>
                 <td v-if="authStore.isAdmin">
-                  <v-btn @click.stop="deleteTurno(turno.id)" color="error">Eliminar</v-btn>
+                  <v-btn @click.stop="deleteTurno(turno.id)" color="error" :loading="deletingTurnoId === turno.id" :disabled="!!deletingTurnoId">Eliminar</v-btn>
                 </td>
               </tr>
             </tbody>
@@ -64,6 +64,7 @@ const turnos = ref([]);
 const turnoStore = useTurnoStore();
 const authStore = useAuthStore();
 const router = useRouter();
+const deletingTurnoId = ref(null);
 
 const fetchTurnos = async () => {
   try {
@@ -74,11 +75,14 @@ const fetchTurnos = async () => {
 };
 
 const deleteTurno = async (id) => {
+  deletingTurnoId.value = id;
   try {
     await turnoStore.deleteTurno(id);
     fetchTurnos();
   } catch (error) {
     console.error(error);
+  } finally {
+    deletingTurnoId.value = null;
   }
 };
 

@@ -17,6 +17,7 @@
             v-model="newGasto.description"
             label="Descripción del Gasto"
             required
+            :disabled="isRegisteringGasto"
           ></v-text-field>
           <v-text-field
             v-model.number="newGasto.amount"
@@ -24,9 +25,9 @@
             type="number"
             step="0.01"
             required
+            :disabled="isRegisteringGasto"
           ></v-text-field>
-          <v-btn type="submit" color="primary">Registrar Gasto</v-btn>
-          <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
+          <v-btn type="submit" color="primary" :loading="isRegisteringGasto" :disabled="isRegisteringGasto">Registrar Gasto</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -60,25 +61,30 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useCajaStore } from '../stores/caja';
+import { useNotificationStore } from '../stores/notification';
 
 const cajaStore = useCajaStore();
+const notificationStore = useNotificationStore();
 const newGasto = ref({ description: '', amount: null });
-const errorMessage = ref('');
+const isRegisteringGasto = ref(false);
 
 const balance = computed(() => cajaStore.balance);
 const gastos = computed(() => cajaStore.gastos);
 
 const handleRegisterGasto = async () => {
   if (!newGasto.value.description || !newGasto.value.amount || newGasto.value.amount <= 0) {
-    errorMessage.value = 'Por favor, complete todos los campos correctamente.';
+    notificationStore.show('Por favor, complete todos los campos correctamente.', 'error');
     return;
   }
+  isRegisteringGasto.value = true;
   try {
     await cajaStore.registrarGasto(newGasto.value);
     newGasto.value = { description: '', amount: null };
-    errorMessage.value = '';
+    notificationStore.show('Gasto registrado exitosamente!');
   } catch (error) {
-    errorMessage.value = error;
+    notificationStore.show(error, 'error');
+  } finally {
+    isRegisteringGasto.value = false;
   }
 };
 

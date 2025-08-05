@@ -7,7 +7,7 @@
         <v-card>
           <v-card-title>Movimientos de Inventario</v-card-title>
           <v-card-text>
-            <v-btn color="primary" @click="movementDialog = true">Agregar Movimiento</v-btn>
+            <v-btn color="primary" @click="movementDialog = true" :disabled="isRegistering">Agregar Movimiento</v-btn>
             <v-list lines="two" class="mt-3">
               <v-list-item v-for="(movement, index) in sortedMovements" :key="index">
                 <v-list-item-title>
@@ -17,7 +17,7 @@
                   Tipo: <v-chip :color="movement.type === 'IN' ? 'success' : 'error'" small><strong>{{ movement.type }}</strong></v-chip>
                 </v-list-item-subtitle>
                 <template v-slot:append>
-                  <v-btn @click="removeMovement(index)" color="error" icon="mdi-delete" variant="text"></v-btn>
+                  <v-btn @click="removeMovement(index)" color="error" icon="mdi-delete" variant="text" :disabled="isRegistering"></v-btn>
                 </template>
               </v-list-item>
             </v-list>
@@ -29,13 +29,13 @@
         <v-card>
           <v-card-title>Detalle de Retiros</v-card-title>
           <v-card-text>
-            <v-btn color="primary" @click="retiroDialog = true">Agregar Retiro</v-btn>
+            <v-btn color="primary" @click="retiroDialog = true" :disabled="isRegistering">Agregar Retiro</v-btn>
             <v-list lines="one" class="mt-3">
               <v-list-item v-for="(retiro, index) in retiros" :key="index">
                 <v-list-item-title>Descripción: <strong>{{ retiro.description }}</strong></v-list-item-title>
                 <v-list-item-subtitle>Monto: <strong>S/ {{ retiro.amount.toFixed(2) }}</strong></v-list-item-subtitle>
                 <template v-slot:append>
-                  <v-btn @click="removeRetiro(index)" color="error" icon="mdi-delete" variant="text"></v-btn>
+                  <v-btn @click="removeRetiro(index)" color="error" icon="mdi-delete" variant="text" :disabled="isRegistering"></v-btn>
                 </template>
               </v-list-item>
             </v-list>
@@ -49,26 +49,24 @@
       <v-card-text>
         <v-form @submit.prevent="handleRegister">
           <v-row>
-            <v-col cols="12" md="4"><v-text-field v-model="turno.fecha" label="Fecha" type="date" required></v-text-field></v-col>
-            <v-col cols="12" md="4"><v-text-field v-model="turno.horaEntrada" label="Hora de Entrada" type="time" required></v-text-field></v-col>
-            <v-col cols="12" md="4"><v-text-field v-model="turno.horaSalida" label="Hora de Salida" type="time" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.kw" label="KW" type="number" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.usuarios" label="Usuarios" type="number" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.dineroPancafe" label="Dinero Pancafe" type="number" step="0.01" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.usanzaPancafe" label="Usanza Pancafe" type="number" step="0.01" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.efectivo" label="Efectivo" type="number" step="0.01" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.yape" label="Yape" type="number" step="0.01" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.consumo" label="Consumo" type="number" step="0.01" required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.snacks" label="Snacks (Calculado)" type="number" step="0.01" readonly required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.ingresoInventario" label="Ingreso Inventario (Calculado)" type="number" step="0.01" readonly required></v-text-field></v-col>
-            <v-col cols="12" md="3"><v-text-field v-model.number="turno.retiros" label="Retiros (Calculado)" type="number" step="0.01" readonly required></v-text-field></v-col>
+            <v-col cols="12" md="4"><v-text-field v-model="turno.fecha" label="Fecha" type="date" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="4"><v-text-field v-model="turno.horaEntrada" label="Hora de Entrada" type="time" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="4"><v-text-field v-model="turno.horaSalida" label="Hora de Salida" type="time" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.kw" label="KW" type="number" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.usuarios" label="Usuarios" type="number" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.dineroPancafe" label="Dinero Pancafe" type="number" step="0.01" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.usanzaPancafe" label="Usanza Pancafe" type="number" step="0.01" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.efectivo" label="Efectivo" type="number" step="0.01" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.yape" label="Yape" type="number" step="0.01" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.consumo" label="Consumo" type="number" step="0.01" required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.snacks" label="Snacks (Calculado)" type="number" step="0.01" readonly required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.ingresoInventario" label="Ingreso Inventario (Calculado)" type="number" step="0.01" readonly required :disabled="isRegistering"></v-text-field></v-col>
+            <v-col cols="12" md="3"><v-text-field v-model.number="turno.retiros" label="Retiros (Calculado)" type="number" step="0.01" readonly required :disabled="isRegistering"></v-text-field></v-col>
           </v-row>
           <v-alert :color="diferencia >= 0 ? 'success' : 'error'" border="start" elevation="2" class="mt-4">
             <h3 class="text-h5">Diferencia: S/ {{ diferencia }}</h3>
           </v-alert>
-          <v-btn type="submit" color="primary" class="mt-4">Registrar Turno</v-btn>
-          <v-alert v-if="successMessage" type="success" class="mt-2">{{ successMessage }}</v-alert>
-          <v-alert v-if="errorMessage" type="error" class="mt-2">{{ errorMessage }}</v-alert>
+          <v-btn type="submit" color="primary" class="mt-4" :loading="isRegistering" :disabled="isRegistering">Registrar Turno</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -112,6 +110,7 @@
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { useTurnoStore } from '../stores/turno';
 import { useProductStore } from '../stores/product';
+import { useNotificationStore } from '../stores/notification';
 
 const TURNO_STORAGE_KEY = 'turno_draft';
 const MOVEMENTS_STORAGE_KEY = 'movements_draft';
@@ -119,6 +118,7 @@ const RETIROS_STORAGE_KEY = 'retiros_draft';
 
 const movementDialog = ref(false);
 const retiroDialog = ref(false);
+const isRegistering = ref(false);
 
 const turno = reactive({
   fecha: '', horaEntrada: '', horaSalida: '', efectivo: 0, yape: 0, snacks: 0, ingresoInventario: 0,
@@ -133,9 +133,8 @@ const retiros = ref([]);
 const productStore = useProductStore();
 const products = ref([]);
 
-const successMessage = ref('');
-const errorMessage = ref('');
 const turnoStore = useTurnoStore();
+const notificationStore = useNotificationStore();
 
 const sortedMovements = computed(() => {
   return [...movements.value].sort((a, b) => {
@@ -179,14 +178,14 @@ const diferencia = computed(() => {
 });
 
 const handleRegister = async () => {
+  isRegistering.value = true;
   try {
     const movementsToSubmit = movements.value.map(({ productId, quantity, type }) => ({ productId, quantity, type }));
     const retirosToSubmit = retiros.value.map(({ description, amount }) => ({ description, amount }));
 
     await turnoStore.createTurno({ turno, movements: movementsToSubmit, retiros: retirosToSubmit });
 
-    successMessage.value = 'Turno registrado exitosamente!';
-    errorMessage.value = '';
+    notificationStore.show('Turno registrado exitosamente!');
     Object.assign(turno, {
       fecha: '', horaEntrada: '', horaSalida: '', efectivo: 0, yape: 0, snacks: 0,
       consumo: 0, retiros: 0, dineroPancafe: 0, usanzaPancafe: 0, kw: 0, usuarios: 0,
@@ -198,8 +197,9 @@ const handleRegister = async () => {
     localStorage.removeItem(MOVEMENTS_STORAGE_KEY);
     localStorage.removeItem(RETIROS_STORAGE_KEY);
   } catch (error) {
-    errorMessage.value = error.message;
-    successMessage.value = '';
+    notificationStore.show(error.message, 'error');
+  } finally {
+    isRegistering.value = false;
   }
 };
 

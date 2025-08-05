@@ -10,7 +10,7 @@
             <v-list-item-title>{{ task.description }}</v-list-item-title>
             <v-list-item-subtitle>Creada por: {{ task.creadoPor }} el {{ new Date(task.fechaCreacion).toLocaleDateString() }}</v-list-item-subtitle>
             <template v-slot:append>
-              <v-btn @click="markAsCompleted(task.id)" color="success">Marcar como Realizada</v-btn>
+              <v-btn @click="markAsCompleted(task.id)" color="success" :loading="completingTaskId === task.id" :disabled="!!completingTaskId">Marcar como Realizada</v-btn>
             </template>
           </v-list-item>
         </v-list>
@@ -34,8 +34,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useTaskStore } from '../stores/task';
+import { useNotificationStore } from '../stores/notification';
 
 const taskStore = useTaskStore();
+const notificationStore = useNotificationStore();
+const completingTaskId = ref(null);
 
 const userTasks = computed(() => taskStore.userTasks);
 
@@ -43,10 +46,14 @@ const pendingTasks = computed(() => userTasks.value.filter(task => task.status =
 const completedTasks = computed(() => userTasks.value.filter(task => task.status === 'REALIZADO'));
 
 const markAsCompleted = async (taskId) => {
+  completingTaskId.value = taskId;
   try {
     await taskStore.markAsCompleted(taskId);
+    notificationStore.show('Tarea completada exitosamente!');
   } catch (error) {
-    console.error(error);
+    notificationStore.show(error.message, 'error');
+  } finally {
+    completingTaskId.value = null;
   }
 };
 
