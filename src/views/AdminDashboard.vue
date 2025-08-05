@@ -103,6 +103,12 @@ const newProduct = ref({
 
 const products = ref([]);
 
+const totalInventoryValue = computed(() => {
+  return products.value.reduce((total, product) => {
+    return total + (product.sellingPrice * product.stock);
+  }, 0);
+});
+
 const handleRegister = async () => {
   isRegistering.value = true;
   await nextTick();
