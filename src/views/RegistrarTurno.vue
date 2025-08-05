@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, watch } from 'vue';
+import { ref, reactive, onMounted, computed, watch, nextTick } from 'vue';
 import { useTurnoStore } from '../stores/turno';
 import { useProductStore } from '../stores/product';
 import { useNotificationStore } from '../stores/notification';
@@ -179,6 +179,7 @@ const diferencia = computed(() => {
 
 const handleRegister = async () => {
   isRegistering.value = true;
+  await nextTick();
   try {
     const movementsToSubmit = movements.value.map(({ productId, quantity, type }) => ({ productId, quantity, type }));
     const retirosToSubmit = retiros.value.map(({ description, amount }) => ({ description, amount }));

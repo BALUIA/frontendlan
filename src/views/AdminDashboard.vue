@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { useProductStore } from '../stores/product';
 import { useNotificationStore } from '../stores/notification';
@@ -98,6 +98,7 @@ const products = ref([]);
 
 const handleRegister = async () => {
   isRegistering.value = true;
+  await nextTick();
   try {
     await authStore.register(username.value, password.value, role.value);
     notificationStore.show('User created successfully!');
@@ -119,6 +120,7 @@ const fetchUsers = async () => {
 
 const deleteUser = async (id) => {
   deletingUserId.value = id;
+  await nextTick();
   try {
     await authStore.deleteUser(id);
     notificationStore.show('User deleted successfully!');
@@ -141,6 +143,7 @@ const fetchProducts = async () => {
 
 const handleAddProduct = async () => {
   isAddingProduct.value = true;
+  await nextTick();
   try {
     await productStore.createProduct(newProduct.value);
     fetchProducts();

@@ -25,9 +25,14 @@
                 :disabled="isLoading"
               ></v-text-field>
 
+              <div v-if="isLoading" class="text-center my-4">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                <p class="mt-2">Iniciando sesión...</p>
+              </div>
+
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" type="submit" :loading="isLoading" :disabled="isLoading">Login</v-btn>
+                <v-btn color="primary" type="submit" :disabled="isLoading">Login</v-btn>
               </v-card-actions>
             </v-form>
           </v-card-text>
@@ -38,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { useRouter } from 'vue-router';
 import { useNotificationStore } from '../stores/notification';
@@ -52,6 +57,8 @@ const notificationStore = useNotificationStore();
 
 const handleLogin = async () => {
   isLoading.value = true;
+  await nextTick(); // Espera a que el DOM se actualice
+
   try {
     await authStore.login(username.value, password.value);
     router.push('/');

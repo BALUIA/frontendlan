@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, nextTick } from 'vue';
 import { useTaskStore } from '../stores/task';
 import { useNotificationStore } from '../stores/notification';
 
@@ -47,6 +47,7 @@ const completedTasks = computed(() => userTasks.value.filter(task => task.status
 
 const markAsCompleted = async (taskId) => {
   completingTaskId.value = taskId;
+  await nextTick();
   try {
     await taskStore.markAsCompleted(taskId);
     notificationStore.show('Tarea completada exitosamente!');

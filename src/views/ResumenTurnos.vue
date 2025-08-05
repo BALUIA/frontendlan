@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { useTurnoStore } from '../stores/turno';
 import { useAuthStore } from '../stores/auth';
 import { useRouter } from 'vue-router';
@@ -76,6 +76,7 @@ const fetchTurnos = async () => {
 
 const deleteTurno = async (id) => {
   deletingTurnoId.value = id;
+  await nextTick();
   try {
     await turnoStore.deleteTurno(id);
     fetchTurnos();

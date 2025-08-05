@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, nextTick } from 'vue';
 import { useTaskStore } from '../stores/task';
 import { useAuthStore } from '../stores/auth';
 import { useNotificationStore } from '../stores/notification';
@@ -71,6 +71,7 @@ const allTasks = computed(() => taskStore.allTasks);
 
 const handleCreateTask = async () => {
   isCreatingTask.value = true;
+  await nextTick();
   try {
     await taskStore.createTask(newTask.value);
     notificationStore.show('Tarea creada exitosamente!');

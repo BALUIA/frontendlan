@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, nextTick } from 'vue';
 import { useCajaStore } from '../stores/caja';
 import { useNotificationStore } from '../stores/notification';
 
@@ -77,6 +77,7 @@ const handleRegisterGasto = async () => {
     return;
   }
   isRegisteringGasto.value = true;
+  await nextTick();
   try {
     await cajaStore.registrarGasto(newGasto.value);
     newGasto.value = { description: '', amount: null };
