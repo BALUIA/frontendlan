@@ -23,6 +23,12 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
+    path: '/manage-products',
+    name: 'ManageProducts',
+    component: () => import('@/views/ManageProducts.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
     path: '/registrar-turno',
     name: 'RegistrarTurno',
     component: () => import('@/views/RegistrarTurno.vue'),

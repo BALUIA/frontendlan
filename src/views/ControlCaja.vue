@@ -67,6 +67,7 @@ const cajaStore = useCajaStore();
 const notificationStore = useNotificationStore();
 const newGasto = ref({ description: '', amount: null });
 const isRegisteringGasto = ref(false);
+const isPageLoading = ref(true);
 
 const balance = computed(() => cajaStore.balance);
 const gastos = computed(() => cajaStore.gastos);
@@ -89,8 +90,17 @@ const handleRegisterGasto = async () => {
   }
 };
 
-onMounted(() => {
-  cajaStore.fetchBalance();
-  cajaStore.fetchGastos();
+onMounted(async () => {
+  isPageLoading.value = true;
+  try {
+    await Promise.all([
+      cajaStore.fetchBalance(),
+      cajaStore.fetchGastos()
+    ]);
+  } catch (error) {
+    notificationStore.show('Error al cargar los datos de la caja.', 'error');
+  } finally {
+    isPageLoading.value = false;
+  }
 });
 </script>

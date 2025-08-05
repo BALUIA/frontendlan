@@ -59,18 +59,24 @@ import { ref, onMounted, nextTick } from 'vue';
 import { useTurnoStore } from '../stores/turno';
 import { useAuthStore } from '../stores/auth';
 import { useRouter } from 'vue-router';
+import { useNotificationStore } from '../stores/notification';
 
 const turnos = ref([]);
 const turnoStore = useTurnoStore();
 const authStore = useAuthStore();
 const router = useRouter();
+const notificationStore = useNotificationStore();
 const deletingTurnoId = ref(null);
+const isPageLoading = ref(true);
 
 const fetchTurnos = async () => {
+  isPageLoading.value = true;
   try {
     turnos.value = await turnoStore.getTurnos();
   } catch (error) {
-    console.error(error);
+    notificationStore.show('Error al cargar los turnos.', 'error');
+  } finally {
+    isPageLoading.value = false;
   }
 };
 
@@ -79,9 +85,10 @@ const deleteTurno = async (id) => {
   await nextTick();
   try {
     await turnoStore.deleteTurno(id);
-    fetchTurnos();
+    await fetchTurnos();
+    notificationStore.show('Turno eliminado correctamente.');
   } catch (error) {
-    console.error(error);
+    notificationStore.show(error.message, 'error');
   } finally {
     deletingTurnoId.value = null;
   }

@@ -65,6 +65,7 @@ const notificationStore = useNotificationStore();
 
 const newTask = ref({ description: '', assignedToUserId: null });
 const isCreatingTask = ref(false);
+const isPageLoading = ref(true);
 
 const users = ref([]);
 const allTasks = computed(() => taskStore.allTasks);
@@ -93,8 +94,17 @@ const fetchUsers = async () => {
   }
 };
 
-onMounted(() => {
-  fetchUsers();
-  taskStore.fetchAllTasks();
+onMounted(async () => {
+  isPageLoading.value = true;
+  try {
+    await Promise.all([
+      fetchUsers(),
+      taskStore.fetchAllTasks()
+    ]);
+  } catch (error) {
+    notificationStore.show('Error al cargar los datos de la página.', 'error');
+  } finally {
+    isPageLoading.value = false;
+  }
 });
 </script>

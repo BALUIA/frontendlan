@@ -119,6 +119,7 @@ const RETIROS_STORAGE_KEY = 'retiros_draft';
 const movementDialog = ref(false);
 const retiroDialog = ref(false);
 const isRegistering = ref(false);
+const isPageLoading = ref(true);
 
 const turno = reactive({
   fecha: '', horaEntrada: '', horaSalida: '', efectivo: 0, yape: 0, snacks: 0, ingresoInventario: 0,
@@ -250,16 +251,23 @@ const submitNewRetiro = () => {
 const removeRetiro = (index) => { retiros.value.splice(index, 1); };
 
 onMounted(async () => {
-  await productStore.fetchProducts();
-  products.value = productStore.products;
+  isPageLoading.value = true;
+  try {
+    await productStore.fetchProducts();
+    products.value = productStore.products;
 
-  const savedTurno = localStorage.getItem(TURNO_STORAGE_KEY);
-  if (savedTurno) Object.assign(turno, JSON.parse(savedTurno));
+    const savedTurno = localStorage.getItem(TURNO_STORAGE_KEY);
+    if (savedTurno) Object.assign(turno, JSON.parse(savedTurno));
 
-  const savedMovements = localStorage.getItem(MOVEMENTS_STORAGE_KEY);
-  if (savedMovements) movements.value = JSON.parse(savedMovements);
+    const savedMovements = localStorage.getItem(MOVEMENTS_STORAGE_KEY);
+    if (savedMovements) movements.value = JSON.parse(savedMovements);
 
-  const savedRetiros = localStorage.getItem(RETIROS_STORAGE_KEY);
-  if (savedRetiros) retiros.value = JSON.parse(savedRetiros);
+    const savedRetiros = localStorage.getItem(RETIROS_STORAGE_KEY);
+    if (savedRetiros) retiros.value = JSON.parse(savedRetiros);
+  } catch (error) {
+    notificationStore.show('Error al cargar los productos.', 'error');
+  } finally {
+    isPageLoading.value = false;
+  }
 });
 </script>

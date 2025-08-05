@@ -6,6 +6,7 @@
     <v-spacer></v-spacer>
     <v-btn to="/login" text v-if="!authStore.isAuthenticated">Login</v-btn>
     <v-btn to="/admin" text v-if="authStore.isAdmin">Admin Dashboard</v-btn>
+    <v-btn to="/manage-products" text v-if="authStore.isAdmin">Manage Products</v-btn>
     <v-btn to="/product-history" text v-if="authStore.isAuthenticated">Historial de Productos</v-btn>
     <v-btn to="/registrar-turno" text v-if="authStore.isAuthenticated">Registrar Turno</v-btn>
     <v-btn to="/resumen-turnos" text v-if="authStore.isAuthenticated">Resumen</v-btn>

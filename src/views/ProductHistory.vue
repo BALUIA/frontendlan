@@ -42,16 +42,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useProductHistoryStore } from '../stores/productHistory';
+import { useNotificationStore } from '../stores/notification';
 
 const productHistoryStore = useProductHistoryStore();
+const notificationStore = useNotificationStore();
 const productsHistory = ref([]);
+const isPageLoading = ref(true);
 
 const fetchHistory = async () => {
+  isPageLoading.value = true;
   try {
     await productHistoryStore.fetchProductHistory();
     productsHistory.value = productHistoryStore.productsHistory;
   } catch (error) {
-    console.error(error);
+    notificationStore.show('Error al cargar el historial.', 'error');
+  } finally {
+    isPageLoading.value = false;
   }
 };
 

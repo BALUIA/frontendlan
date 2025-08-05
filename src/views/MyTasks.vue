@@ -39,6 +39,7 @@ import { useNotificationStore } from '../stores/notification';
 const taskStore = useTaskStore();
 const notificationStore = useNotificationStore();
 const completingTaskId = ref(null);
+const isPageLoading = ref(true);
 
 const userTasks = computed(() => taskStore.userTasks);
 
@@ -58,7 +59,14 @@ const markAsCompleted = async (taskId) => {
   }
 };
 
-onMounted(() => {
-  taskStore.fetchMyTasks();
+onMounted(async () => {
+  isPageLoading.value = true;
+  try {
+    await taskStore.fetchMyTasks();
+  } catch (error) {
+    notificationStore.show('Error al cargar las tareas.', 'error');
+  } finally {
+    isPageLoading.value = false;
+  }
 });
 </script>

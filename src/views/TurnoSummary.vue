@@ -57,13 +57,17 @@ const router = useRouter();
 const summary = ref(null);
 const error = ref(null);
 const turnoStore = useTurnoStore();
+const isPageLoading = ref(true);
 
 const fetchTurnoSummary = async (id) => {
+  isPageLoading.value = true;
   try {
     summary.value = await turnoStore.getTurnoSummary(id);
   } catch (err) {
     error.value = 'Failed to fetch turno summary.';
     console.error(err);
+  } finally {
+    isPageLoading.value = false;
   }
 };
 
@@ -75,6 +79,9 @@ onMounted(() => {
   const turnoId = route.params.id;
   if (turnoId) {
     fetchTurnoSummary(turnoId);
+  } else {
+    isPageLoading.value = false;
+    error.value = "No se proporcionó un ID de turno.";
   }
 });
 </script>
