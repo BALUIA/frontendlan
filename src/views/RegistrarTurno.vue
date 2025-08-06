@@ -76,7 +76,14 @@
       <v-card>
         <v-card-title><span class="text-h5">Agregar Movimiento</span></v-card-title>
         <v-card-text>
-          <v-select v-model="newMovement.productId" :items="products" item-title="name" item-value="id" label="Producto"></v-select>
+          <v-autocomplete
+            v-model="newMovement.productId"
+            :items="products"
+            item-title="name"
+            item-value="id"
+            label="Buscar Producto"
+            placeholder="Escribe para buscar..."
+          ></v-autocomplete>
           <v-text-field v-model.number="newMovement.quantity" label="Cantidad" type="number" required></v-text-field>
           <v-select v-model="newMovement.type" :items="['IN', 'OUT']" label="Tipo de Movimiento"></v-select>
         </v-card-text>
