@@ -247,11 +247,15 @@ const addRetiro = (retiro) => {
 };
 
 const submitNewRetiro = () => {
-  if (newRetiro.description && newRetiro.amount > 0) {
-    addRetiro({ ...newRetiro });
+  const amount = parseFloat(newRetiro.amount);
+  if (newRetiro.description && !isNaN(amount) && amount !== 0) {
+    addRetiro({ ...newRetiro, amount: amount });
     newRetiro.description = '';
     newRetiro.amount = 0;
     retiroDialog.value = false;
+  } else {
+    // Optional: Notify user of invalid input
+    notificationStore.show('Por favor, ingrese una descripción y un monto válido.', 'error');
   }
 };
 
